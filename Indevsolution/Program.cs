@@ -16,7 +16,8 @@ namespace Indevsolution
     {
         public static void Main(string[] args)
         {
-            
+            ExcelLib.PopulateInCollection(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
+            DataTable table = ExcelLib.ExcelToDataTable(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
         }
 
         [SetUp]
@@ -28,34 +29,38 @@ namespace Indevsolution
             Properties.driver.Navigate().GoToUrl("http://dev.indev.nice.org.uk/");
             Properties.driver.Manage().Window.Maximize();
             Console.WriteLine("Opened URL");
+
         }
 
         [Test]
-        public void ExecuteTest()
+        public void LoginAndSearchTest()
         {
+            //Read the data from the Excel sheet
             ExcelLib.PopulateInCollection(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
+            DataTable table = ExcelLib.ExcelToDataTable(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
 
             //Login to Indev application
             LoginPageObject LoginPage = new LoginPageObject();
-
-            DataTable table = ExcelLib.ExcelToDataTable(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
-
             //Read the User name and password and perform login operation
-            //IndevPageObject IndevPage = LoginPage.Login("subha.anand@nice.org.uk", "password");
             IndevPageObject IndevPage = LoginPage.Login(ExcelLib.ReadData(1, "UserName"), ExcelLib.ReadData(1, "UserPassword"));
+            Assert.AreEqual("In development projects", IndevPage.IndevProjectTab.Text);
+            Assert.IsTrue(IndevPage.NewProjectButton.Displayed);
+            StringAssert.AreEqualIgnoringCase(IndevPage.InnerTophatText.Text, "In development projects");
 
-                for (int row = 1; row <= table.Rows.Count; row++)
-                {
-                //Search for Indev projects
+            //Search for Indev projects in the home page
+            for (int row = 1; row <= table.Rows.Count; row++)
+            {
                 IndevPage.Search(ExcelLib.ReadData(row, "SearchKeyword"));
-                //IndevPage.Search("cancer");
-                }
+                Assert.IsTrue(IndevPage.searchResultsHeading.Text.Contains("results for"));
             }
 
+        }
+
         [Test]
-        public void NextMethod()
+        public void NextTest()
         {
-            Console.WriteLine("Next method");
+            
+
         }
 
         [TearDown]

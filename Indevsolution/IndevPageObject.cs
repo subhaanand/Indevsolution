@@ -22,6 +22,14 @@ namespace Indevsolution
         public IWebElement txtSearchKeyword { get; set; }
         [FindsBy(How = How.ClassName, Using = "icon-search")]
         public IWebElement btnSearch { get; set; }
+        [FindsBy(How = How.LinkText, Using = "In development projects")]
+        public IWebElement IndevProjectTab { get; set; }
+        [FindsBy(How = How.TagName, Using = "p")]
+        public IWebElement searchResultsHeading { get; set; }
+        [FindsBy(How = How.LinkText, Using = "NEW PROJECT")]
+        public IWebElement NewProjectButton { get; set; }
+        [FindsBy(How = How.ClassName, Using = "partner-brand")]
+        public IWebElement InnerTophatText { get; set; }
 
         //Perform Search function and return nothing
         public void Search(string SearchKeyword)
@@ -29,6 +37,7 @@ namespace Indevsolution
             txtSearchKeyword.Clear();
             txtSearchKeyword.SendKeys(SearchKeyword);
             btnSearch.Clicks();
+            Properties.driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
         }
     }
 }
