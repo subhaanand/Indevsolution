@@ -32,23 +32,22 @@ namespace Indevsolution
             Console.WriteLine("Opened URL");
             ExcelLib.PopulateInCollection(FileLocation);
             Properties.TheTable = ExcelLib.ExcelToDataTable(FileLocation);
-        }
 
-        [Test]
-        public void LoginAndSearchTest()
-        {
             //Login to Indev application
             LoginPageObject LoginPage = new LoginPageObject();
-            //
-            
-            
             //Read the User name and password and perform login operation
             IndevPageObject IndevPage = LoginPage.Login(ExcelLib.ReadData(1, "UserName"), ExcelLib.ReadData(1, "UserPassword"));
             Assert.AreEqual("In development projects", IndevPage.IndevProjectTab.Text);
             Assert.IsTrue(IndevPage.NewProjectButton.Displayed);
             StringAssert.AreEqualIgnoringCase(IndevPage.InnerTophatText.Text, "In development projects");
+        }
 
+        [Test]
+        public void SearchTest()
+        {
+            
             //Search for Indev projects in the home page
+            IndevPageObject IndevPage = new IndevPageObject();
             for (int row = 1; row <= Properties.TheTable.Rows.Count; row++)
             {
                 IndevPage.Search(ExcelLib.ReadData(row, "SearchKeyword"));
