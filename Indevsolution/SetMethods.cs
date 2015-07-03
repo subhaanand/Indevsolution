@@ -24,7 +24,7 @@ namespace Indevsolution
         }
 
         //Selecting a dropdown control
-        public static void SelectDropDown(this IWebElement element, string value)
+        public static void SelectDropDown   (this IWebElement element, string value)
         {
             new SelectElement(element).SelectByText(value);
         }

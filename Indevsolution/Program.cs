@@ -16,8 +16,7 @@ namespace Indevsolution
     {
         public static void Main(string[] args)
         {
-            ExcelLib.PopulateInCollection(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
-            DataTable table = ExcelLib.ExcelToDataTable(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
+            
         }
 
         [SetUp]
@@ -25,22 +24,24 @@ namespace Indevsolution
         {
             //Navigate to the Indev application URL
             Properties.driver = new ChromeDriver();
+            string URL = "http://dev.indev.nice.org.uk/";
+            string FileLocation = "C:\\Users\\sanand\\Documents\\Selenium webdriver\\IndevData.xlsx";
             Properties.driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
-            Properties.driver.Navigate().GoToUrl("http://dev.indev.nice.org.uk/");
+            Properties.driver.Navigate().GoToUrl(URL);
             Properties.driver.Manage().Window.Maximize();
             Console.WriteLine("Opened URL");
-
+            ExcelLib.PopulateInCollection(FileLocation);
+            Properties.TheTable = ExcelLib.ExcelToDataTable(FileLocation);
         }
 
         [Test]
         public void LoginAndSearchTest()
         {
-            //Read the data from the Excel sheet
-            ExcelLib.PopulateInCollection(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
-            DataTable table = ExcelLib.ExcelToDataTable(@"C:\Users\sanand\Documents\Selenium webdriver\IndevData.xlsx");
-
             //Login to Indev application
             LoginPageObject LoginPage = new LoginPageObject();
+            //
+            
+            
             //Read the User name and password and perform login operation
             IndevPageObject IndevPage = LoginPage.Login(ExcelLib.ReadData(1, "UserName"), ExcelLib.ReadData(1, "UserPassword"));
             Assert.AreEqual("In development projects", IndevPage.IndevProjectTab.Text);
@@ -48,7 +49,7 @@ namespace Indevsolution
             StringAssert.AreEqualIgnoringCase(IndevPage.InnerTophatText.Text, "In development projects");
 
             //Search for Indev projects in the home page
-            for (int row = 1; row <= table.Rows.Count; row++)
+            for (int row = 1; row <= Properties.TheTable.Rows.Count; row++)
             {
                 IndevPage.Search(ExcelLib.ReadData(row, "SearchKeyword"));
                 Assert.IsTrue(IndevPage.searchResultsHeading.Text.Contains("results for"));
