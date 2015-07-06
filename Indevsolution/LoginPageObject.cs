@@ -33,8 +33,16 @@ namespace Indevsolution
         {
             txtUserName.EnterText(UserName);
             txtUserPassword.EnterText(UserPassword);
-            btnSubmit.ButtonClick();
-            return new IndevPageObject();
+            if (SetMethods.Exist(btnSubmit))
+            {
+                btnSubmit.ButtonClick();
+                return new IndevPageObject();
+            }
+            else
+            {
+                Console.WriteLine("The Login button is not found");
+                return null;
+            }
         }
 
         public void HandleHttpsAlert()
