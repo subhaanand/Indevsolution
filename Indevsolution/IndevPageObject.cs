@@ -34,10 +34,8 @@ namespace Indevsolution
         //Perform Search function and return nothing
         public void Search(string SearchKeyword)
         {
-            txtSearchKeyword.Clear();
-            txtSearchKeyword.SendKeys(SearchKeyword);
-            btnSearch.Clicks();
-            Properties.driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
+            txtSearchKeyword.EnterText(SearchKeyword);
+            btnSearch.ButtonClick();
         }
     }
 }

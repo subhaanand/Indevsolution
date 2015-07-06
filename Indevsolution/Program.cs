@@ -24,14 +24,14 @@ namespace Indevsolution
         {
             //Navigate to the Indev application URL
             Properties.driver = new ChromeDriver();
+            SetMethods.ImplicitWait(Properties.driver);
             string URL = "http://dev.indev.nice.org.uk/";
             string FileLocation = "C:\\Users\\sanand\\Documents\\Selenium webdriver\\IndevData.xlsx";
-            Properties.driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
             Properties.driver.Navigate().GoToUrl(URL);
             Properties.driver.Manage().Window.Maximize();
-            Console.WriteLine("Opened URL");
             ExcelLib.PopulateInCollection(FileLocation);
             Properties.TheTable = ExcelLib.ExcelToDataTable(FileLocation);
+            Console.WriteLine("Opened URL");
 
             //Login to Indev application
             LoginPageObject LoginPage = new LoginPageObject();

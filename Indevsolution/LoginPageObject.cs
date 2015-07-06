@@ -31,9 +31,9 @@ namespace Indevsolution
         //Perform login operation and go to the Indev home page            
         public IndevPageObject Login(string UserName, string UserPassword)
         {
-            txtUserName.SendKeys(UserName);
-            txtUserPassword.SendKeys(UserPassword);
-            btnSubmit.Click();
+            txtUserName.EnterText(UserName);
+            txtUserPassword.EnterText(UserPassword);
+            btnSubmit.ButtonClick();
             return new IndevPageObject();
         }
 
