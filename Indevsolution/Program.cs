@@ -57,9 +57,11 @@ namespace Indevsolution
         }
 
         [Test]
-        public void NextTest()
+        public void CreateAdviceProjectTest()
         {
-            
+            //Create Advice Project
+            AdvicePageObject AdvicePage = new AdvicePageObject();
+            AdvicePage.CreateAdviceProject(ExcelLib.ReadData(1, "AdviceProjectName"));
 
         }
 

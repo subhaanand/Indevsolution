@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,13 @@ namespace Indevsolution
         {
             element.Clear();
             element.SendKeys(value);
+        }
+
+        //Selecting a dropdown control
+        public static void SelectDropDown(this IWebElement element, string value)
+        {
+            //element.Clear();
+            new SelectElement(element).SelectByText(value);
         }
 
         //Click button, check box, option, etc..
@@ -74,11 +82,37 @@ namespace Indevsolution
             (new WebDriverWait(driver, TimeSpan.FromSeconds(10))).Until(ExpectedConditions.ElementToBeClickable(By.PartialLinkText(linktext)));
         }
 
-        //Selecting a dropdown control
-        public static void SelectDropDown   (this IWebElement element, string value)
+        //Handle alerts
+        public static void HandleHttpsAlert()
         {
-            element.Clear();
-            new SelectElement(element).SelectByText(value);
+            // alert pops up for non https
+            var alert = Properties.driver.SwitchTo().Alert();
+            alert.Accept();
         }
-    }
+
+        //Handle Hover
+        public static void Hover(this IWebDriver driver, IWebElement elementToHover, IWebElement elementToClick)
+        {
+            Actions action = new Actions(driver);
+            action.MoveToElement(elementToHover).Click(elementToClick).Build().Perform();
+        }
+
+        //Handle Hover and click
+        public static void HoverAndClick(this IWebDriver driver,  IWebElement element)
+        {
+            Actions action = new Actions(driver);
+            action.MoveToElement(element).Perform();
+
+        }
+
+        //Switch Window
+        public static void SwitchWindow(this IWebDriver driver) 
+        {
+	    foreach (string windowName in driver.WindowHandles) 
+            {
+	        driver.SwitchTo().Window(windowName);
+	        }
+        }
+
+     }
 }

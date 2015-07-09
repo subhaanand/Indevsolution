@@ -35,7 +35,7 @@ namespace Indevsolution
             txtUserPassword.EnterText(UserPassword);
             if (SetMethods.Exist(btnSubmit))
             {
-                btnSubmit.ButtonClick();
+                btnSubmit.ButtonClick(); 
                 return new IndevPageObject();
             }
             else
@@ -44,24 +44,5 @@ namespace Indevsolution
                 return null;
             }
         }
-
-        public void HandleHttpsAlert()
-        {
-            // alert pops up for non https
-            var alert = Properties.driver.SwitchTo().Alert();
-            alert.Accept();
-        }
-        //public page SwitchToNewWindow(string windowTitle)
-        //{
-            //foreach (var item in Properties.driver.WindowHandles)
-            //{
-                //if (Properties.driver.SwitchTo().Window(item).Title == windowTitle)
-                //{
-                    //Properties.driver.SwitchTo().Window(item);
-                    //break;
-                //}
-            //}
-            //return this;
-        //}
     }
 }
