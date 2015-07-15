@@ -35,7 +35,7 @@ namespace Indevsolution
         [FindsBy(How = How.XPath, Using = ".//*[@id='ProjectType']")]
         public IWebElement txtCreateAdviceProjectModalProjectTypeSelect { get; set; }
 
-        [FindsBy(How = How.Name, Using = "PublishedDate")]
+        [FindsBy(How = How.XPath, Using = ".//*[@id='create-advice-project']/div[2]/form/div[3]/div/input")]
         public IWebElement txtCreateAdviceProjectModalPublishedDate { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//button[@type='reset']")]
@@ -44,35 +44,69 @@ namespace Indevsolution
         [FindsBy(How = How.XPath, Using = ".//*[@id='create-advice-project']/div[2]/form/div[4]/div/button[2]")]
         public IWebElement txtCreateAdviceProjectModalCreateBtn { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//button[@class='btn btn-small pull-right edit-action']")]
+        public IList <IWebElement> txtEditAdviceProjectModal { get; set; }
+
+
         //Perform Advice create function and return nothing
-        public void CreateAdviceProject(string AdviceProjectName)
+        public void CreatEditAndDeleteAdviceProject(string AdviceProjectName, string AdviceExpectedPublishedDate)
         {
-            txtAdviceProjectsTab.Click();
-            string homePage = Properties.driver.CurrentWindowHandle;
+            txtAdviceProjectsTab.Click();            
 
-            txtNewAdviceProjectsButton.Click();
-            //SetMethods.ImplicitWait(Properties.driver);
-            Thread.Sleep(2000);
-            var windows = Properties.driver.WindowHandles;
+           txtNewAdviceProjectsButton.Click();
 
-            foreach (string handle in windows)
-            {
-                if (handle != homePage)
-                {
-                    Properties.driver.SwitchTo().Window(handle); break;
-                }
-            }
+            SetMethods.SwitchWindow(Properties.driver);
+
+            //Create an advice project
             if (SetMethods.Exist(txtCreateAdviceProjectModalLabel))
             {
                 txtCreateAdviceProjectModalTitleTextArea.EnterText(AdviceProjectName);
                 txtCreateAdviceProjectModalProjectTypeSelect.SelectDropDown("Key therapeutic topics");
+                txtCreateAdviceProjectModalPublishedDate.SendKeys(AdviceExpectedPublishedDate);
                 txtCreateAdviceProjectModalCreateBtn.ButtonClick();
+                SetMethods.SwitchWindow(Properties.driver);
             }    
             else
             {
                 Console.WriteLine("The element is not found in New Advice Project Modal");
-            }         
-        
+            }
+
+            //Edit the created advice project
+            Thread.Sleep(5000);
+            string LinkValue = txtEditAdviceProjectModal.Last().GetAttribute("href");
+            txtEditAdviceProjectModal.Last().Click();
+            SetMethods.SwitchWindow(Properties.driver);
+            var ParentId = Properties.driver.FindElement(By.Id(LinkValue.Replace("#","")));
+            var ChildIdTitle = ParentId.FindElement(By.Id("Title"));
+            ChildIdTitle.EnterText("Test Advice Project");
+            var ChildIdDate = ParentId.FindElement(By.Name("PublishedDate"));
+            ChildIdDate.SendKeys("01122016");
+            var buttons = ParentId.FindElements(By.TagName("button"));
+            var saveButton = buttons.First(b => b.Text == "Save");
+            saveButton.ButtonClick();
+            SetMethods.SwitchWindow(Properties.driver);
+
+            //Edit, but Do not Save, but just Close the modal
+            Thread.Sleep(5000);
+            string HrefLink = txtEditAdviceProjectModal.Last().GetAttribute("href");
+            txtEditAdviceProjectModal.Last().Click();
+            SetMethods.SwitchWindow(Properties.driver);
+            var ParentDiv = Properties.driver.FindElement(By.Id(HrefLink.Replace("#", "")));
+            var EditTitle = ParentDiv.FindElement(By.Id("Title"));
+            EditTitle.EnterText("Test");
+            var closeButton = ParentDiv.FindElements(By.TagName("button")).Where(b => b.Text == "Close").First();
+            closeButton.ButtonClick();
+            SetMethods.SwitchWindow(Properties.driver);
+
+            //Delete the created advice project
+            Thread.Sleep(5000);
+            string HrefLinkValue = txtEditAdviceProjectModal.Last().GetAttribute("href");
+            txtEditAdviceProjectModal.Last().Click();
+            SetMethods.SwitchWindow(Properties.driver);
+            var ParentDivId = Properties.driver.FindElement(By.Id(HrefLinkValue.Replace("#", "")));
+            var deleteButton = ParentDivId.FindElements(By.TagName("button")).Where(b => b.Text == "Delete").First();
+            deleteButton.ButtonClick();
+            SetMethods.SwitchWindow(Properties.driver);     
                      
         }
     }

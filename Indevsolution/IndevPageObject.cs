@@ -20,14 +20,19 @@ namespace Indevsolution
         //Identify the Search elements in the Indev home page
         [FindsBy(How = How.Name, Using = "q")]
         public IWebElement txtSearchKeyword { get; set; }
+
         [FindsBy(How = How.ClassName, Using = "icon-search")]
         public IWebElement btnSearch { get; set; }
-        [FindsBy(How = How.LinkText, Using = "In development projects")]
+
+        [FindsBy(How = How.LinkText, Using = "Guidance projects")]
         public IWebElement IndevProjectTab { get; set; }
+
         [FindsBy(How = How.TagName, Using = "p")]
         public IWebElement searchResultsHeading { get; set; }
+
         [FindsBy(How = How.LinkText, Using = "NEW PROJECT")]
         public IWebElement NewProjectButton { get; set; }
+
         [FindsBy(How = How.ClassName, Using = "partner-brand")]
         public IWebElement InnerTophatText { get; set; }
 

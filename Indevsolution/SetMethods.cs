@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Indevsolution
@@ -106,13 +107,23 @@ namespace Indevsolution
         }
 
         //Switch Window
-        public static void SwitchWindow(this IWebDriver driver) 
+        public static void SwitchWindow(this IWebDriver driver)
         {
-	    foreach (string windowName in driver.WindowHandles) 
-            {
-	        driver.SwitchTo().Window(windowName);
-	        }
-        }
+            string homePage = Properties.driver.CurrentWindowHandle;
+            Thread.Sleep(2000);
+            var windows = Properties.driver.WindowHandles;
 
-     }
+            foreach (string handle in windows)
+            {
+                if (handle != homePage)
+                {
+                    Properties.driver.SwitchTo().Window(handle);
+                    break;
+                }
+            }
+        }
+       
+    }
 }
+
+

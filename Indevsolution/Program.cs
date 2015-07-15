@@ -37,9 +37,9 @@ namespace Indevsolution
             LoginPageObject LoginPage = new LoginPageObject();
             //Read the User name and password and perform login operation
             IndevPageObject IndevPage = LoginPage.Login(ExcelLib.ReadData(1, "UserName"), ExcelLib.ReadData(1, "UserPassword"));
-            Assert.AreEqual("In development projects", IndevPage.IndevProjectTab.Text);
+            Assert.AreEqual("Guidance projects", IndevPage.IndevProjectTab.Text);
             Assert.IsTrue(IndevPage.NewProjectButton.Displayed);
-            StringAssert.AreEqualIgnoringCase(IndevPage.InnerTophatText.Text, "In development projects");
+            StringAssert.AreEqualIgnoringCase(IndevPage.InnerTophatText.Text, "Guidance projects");
         }
 
         [Test]
@@ -57,12 +57,11 @@ namespace Indevsolution
         }
 
         [Test]
-        public void CreateAdviceProjectTest()
+        public void CreatEditAndDeleteAdviceProjectTest()
         {
             //Create Advice Project
             AdvicePageObject AdvicePage = new AdvicePageObject();
-            AdvicePage.CreateAdviceProject(ExcelLib.ReadData(1, "AdviceProjectName"));
-
+            AdvicePage.CreatEditAndDeleteAdviceProject(ExcelLib.ReadData(1, "AdviceProjectName"), ExcelLib.ReadData(1, "AdviceExpectedPublishedDate"));
         }
 
         [TearDown]
